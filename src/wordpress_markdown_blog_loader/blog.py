@@ -16,6 +16,7 @@ from binx_og_image_generator.generator import Blog as ImageGeneratorBlog
 from markdown import markdown
 
 from wordpress_markdown_blog_loader.api import Post, Medium
+from wordpress_markdown_blog_loader import html_to_gutenberg
 from wordpress_markdown_blog_loader.api import Wordpress, WordpressEndpoint
 from wordpress_markdown_blog_loader.remove_newlines import (
     remove_newlines_from_paragraphs,
@@ -299,9 +300,11 @@ class Blog(object):
 
         content = self.markdown_image_pattern.sub(replace_references, self.content)
         html = markdown(
-            content, extensions=["fenced_code", "attr_list", "tables", "footnotes"]
+            content, extensions=["fenced_code", "attr_list", "tables", "footnotes"],
         )
-        return remove_newlines_from_paragraphs(html)
+
+        html = remove_newlines_from_paragraphs(html)
+        return html_to_gutenberg.convert(self.title, html)
 
     @property
     def local_image_references(self) -> set[str]:
