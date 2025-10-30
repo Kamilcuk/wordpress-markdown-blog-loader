@@ -578,6 +578,7 @@ class Wordpress(object):
         return Post(response.json())
 
     def create_tag(self, name: str) -> int:
+        print(f"INFO: creating tag {name}")
         response = self.session.post(
             f"{self.url}/tags",
             json=dict(name=name),
@@ -589,6 +590,7 @@ class Wordpress(object):
         return response.json()["id"]
 
     def create_category(self, name: str) -> int:
+        print(f"INFO: creating category {name}")
         response = self.session.post(
             f"{self.url}/categories",
             json=dict(name=name),
